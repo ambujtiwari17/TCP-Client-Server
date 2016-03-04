@@ -32,17 +32,24 @@ recvThread = threading.Thread(target=receiveMsg, args=("RecThread", s))
 recvThread.start()
 
 alias = raw_input("Name: ")
-message = raw_input(alias + "->")
+#message = raw_input(alias + "->")
+message=''
 while message !='q':
-	if message != '':
-		s.sendto(alias + " says " + message, server)
+	
 	threadLock.acquire()
 	message = raw_input(alias + "-> ")
 	threadLock.release()
-	#time.sleep(0.2)
+	if message != '':
+		s.sendto(alias + " says " + message, server)
+	'''threadLock.acquire()
+	message = raw_input(alias + "-> ")
+	threadLock.release()'''
+	time.sleep(0.5)
+
 if message == 'q':
-	print alias + "has now exited"
-	s.sendto(alias + "has now exited", server)
+	#print alias + " has now exited"
+	s.sendto(alias + " has now exited", server)	
+	print alias + " has now exited"
 
 shut = True
 recvThread.join()

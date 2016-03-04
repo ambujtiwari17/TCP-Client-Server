@@ -21,14 +21,27 @@ print "Chat server running now on port " + str(port)
 while not stop:
 	try:
 		data, address = udpServerSock.recvfrom(2048)
-		if "quit" in str(data):
-			stop = True
+#		print address[1] 
 		if address not in clientsList:
 			clientsList.append(address)
-
-		print "Time: " + time.ctime(time.time()) + " " + str(data)
+			#print address + " joined the chat"
 		for client in clientsList:
-			udpServerSock.sendto(data, client) 
+			if client[1] != address[1]:
+				udpServerSock.sendto(data, client) 
+		print "Time: " + time.ctime(time.time()) + " " + str(data)
+		if "q" in str(data):
+			stop = True
+			for clients in clientsList:
+				if client[1] != address[1]:
+					udpServerSock.sendto(data.split()[0] + " has exit the room", client)	
+				clientList.remove(address)
+				
+#		if address not in clientsList:
+#			clientsList.append(address)
+
+	#	print "Time: " + time.ctime(time.time()) + " " + str(data)
+		#for client in clientsList:
+		#	udpServerSock.sendto(data, client) 
 	except:
 		pass
 
